@@ -36,6 +36,6 @@ Este script é estritamente para fins educacionais e de conscientização em seg
 Desenvolvido por [SkullDev](https://github.com/SkullXss).
 
 ## Licença
-Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
+Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE](LICENSE.md) para obter detalhes.
 
 [Link para o repositório no GitHub](https://github.com/SkullXss/SkullPish/)
